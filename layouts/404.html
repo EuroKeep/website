@@ -1,0 +1,12 @@
+{{ define "main" }}
+<article class="page page--404">
+  <header class="page__head">
+    <div class="container container--narrow">
+      <p class="eyebrow">Error 404</p>
+      <h1>Page not found</h1>
+      <p class="page__lead">The page you are looking for doesn't exist or has been moved.</p>
+      <p><a class="btn btn--primary" href="{{ "/" | relURL }}">Back to the start page</a></p>
+    </div>
+  </header>
+</article>
+{{ end }}

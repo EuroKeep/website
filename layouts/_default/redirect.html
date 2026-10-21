@@ -1,0 +1,89 @@
+{{- /* Redirector for deep links from the documentation, e.g. /open/?path=/a/mobile/budget/list.
+       The path is appended to the instance URL the visitor has stored in their browser. */ -}}
+{{ define "main" }}
+<article class="page">
+  <header class="page__head">
+    <div class="container container--narrow">
+      {{ with .Params.eyebrow }}<p class="eyebrow">{{ . }}</p>{{ end }}
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.lead }}<p class="page__lead">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  <div class="container container--narrow redirect">
+    <p class="redirect__path">Requested page: <code id="redirect-path">/a/</code></p>
+
+    <div id="redirect-go" class="redirect__go" hidden>
+      <a class="btn btn--primary" id="redirect-target" href="#">Open in my EuroKeep</a>
+      <p class="redirect__hint">Opens <code id="redirect-target-text"></code></p>
+    </div>
+
+    <form id="redirect-form" class="redirect__form" novalidate>
+      <label for="redirect-url">Address of your EuroKeep instance</label>
+      <div class="redirect__row">
+        <input type="url" id="redirect-url" name="url" placeholder="https://eurokeep.example.org" autocomplete="url" inputmode="url" spellcheck="false" required>
+        <button type="submit" class="btn btn--primary" id="redirect-save">Save &amp; open</button>
+      </div>
+      <p class="redirect__error" id="redirect-error" role="alert" hidden>Please enter a valid address starting with https:// or http://.</p>
+    </form>
+
+    <noscript><p>This page needs JavaScript to forward you to your instance.</p></noscript>
+  </div>
+</article>
+<script>
+  (() => {
+    const storageKey = 'eurokeep.instanceUrl';
+    const $ = (id) => document.getElementById(id);
+
+    // Path inside the instance from ?path=… (URL-encoded, may contain its own query and hash).
+    // A full URL is accepted too; only its path, query and hash are used.
+    const requested = new URLSearchParams(location.search).get('path') || '';
+    let path = '/a/';
+    try {
+      const url = new URL(requested, 'https://instance.invalid/');
+      if (/^https?:$/.test(url.protocol) && url.pathname !== '/') path = url.pathname + url.search + url.hash;
+    } catch (e) { /* keep default */ }
+
+    const normalize = (value) => {
+      value = value.trim();
+      if (!value) return null;
+      if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(value)) value = 'https://' + value;
+      try {
+        const url = new URL(value);
+        if (url.protocol !== 'https:' && url.protocol !== 'http:') return null;
+        return (url.origin + url.pathname).replace(/\/+$/, '');
+      } catch (e) {
+        return null;
+      }
+    };
+
+    const load = () => { try { return normalize(localStorage.getItem(storageKey) || ''); } catch (e) { return null; } };
+    const store = (value) => { try { localStorage.setItem(storageKey, value); } catch (e) { /* private mode – link still works once */ } };
+
+    const show = (base) => {
+      const target = base + path;
+      $('redirect-target').href = target;
+      $('redirect-target-text').textContent = target;
+      $('redirect-go').hidden = false;
+      $('redirect-save').classList.replace('btn--primary', 'btn--secondary');
+      return target;
+    };
+
+    $('redirect-path').textContent = path;
+
+    const stored = load();
+    if (stored) {
+      $('redirect-url').value = stored;
+      show(stored);
+    }
+
+    $('redirect-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const base = normalize($('redirect-url').value);
+      $('redirect-error').hidden = !!base;
+      if (!base) return;
+      store(base);
+      location.href = show(base);
+    });
+  })();
+</script>
+{{ end }}

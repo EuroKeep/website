@@ -1,0 +1,52 @@
+# Feature showcase: screenshot in an iPhone frame (left) + description (right).
+# Put portrait screenshots (WebP/PNG/JPG, 9:19.5, e.g. 1179×2556) into assets/images/screenshots/ – Hugo creates resized WebP variants automatically.
+# "eyebrow" is the short label above the title.
+# "image" is the light variant (default), "image_dark" (optional) is shown when the visitor uses dark mode.
+- eyebrow: "Accounts"
+  title: "All accounts at a glance"
+  text: "Checking, savings, credit card or cash: EuroKeep shows all your balances in one place – up to date and easy to read."
+  image: "images/screenshots/accounts_light.png"
+  image_dark: "images/screenshots/accounts_dark.png"
+  alt: "Account overview in EuroKeep"
+
+- eyebrow: "Budgets"
+  title: "Budgets that think ahead"
+  text: "Set monthly budgets per category and instantly see how much is left. Overspending is clearly highlighted."
+  image: "images/screenshots/budgets_light.png"
+  image_dark: "images/screenshots/budgets_dark.png"
+  alt: "Budget overview in EuroKeep"
+
+- eyebrow: "Dashboard"
+  title: "Everything on one home screen"
+  text: "Your net worth, your favourite accounts and the state of your budgets – the home screen shows what matters as soon as you open EuroKeep."
+  image: "images/screenshots/home_light.png"
+  image_dark: "images/screenshots/home_dark.png"
+  alt: "EuroKeep home screen with net worth, favourite accounts and budgets"
+
+- eyebrow: "Savings goals"
+  title: "Piggy banks for your goals"
+  text: "Saving for a new phone or the next holiday? Set a target amount and EuroKeep shows how much is already saved and what to put aside each month to get there."
+  image: "images/screenshots/piggybanks_light.png"
+  image_dark: "images/screenshots/piggybanks_dark.png"
+  alt: "Piggy bank overview in EuroKeep with savings goal and monthly rate"
+
+- eyebrow: "Privacy on the go"
+  title: "Discreet mode"
+  text: "Checking your finances on the train or in a meeting? One tap on the eye icon blurs all amounts – the overview stays, the numbers stay private."
+  image: "images/screenshots/discreet_light.png"
+  image_dark: "images/screenshots/discreet_dark.png"
+  alt: "EuroKeep home screen with all amounts blurred in discreet mode"
+
+- eyebrow: "Reports"
+  title: "Insights that make sense"
+  text: "Charts show where your money goes – by category, month or account. No third-party analytics involved."
+  image: "images/screenshots/analysis_light.png"
+  image_dark: "images/screenshots/analysis_dark.png"
+  alt: "Reports and charts in EuroKeep"
+
+- eyebrow: "Recurring payments"
+  title: "Subscriptions under control"
+  text: "Recurring payments like streaming, insurance or rent can be recorded and are neatly collected in one overview."
+  image: "images/screenshots/subscriptions_light.png"
+  image_dark: "images/screenshots/subscriptions_dark.png"
+  alt: "Subscription overview in EuroKeep"

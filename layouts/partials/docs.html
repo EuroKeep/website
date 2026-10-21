@@ -1,0 +1,30 @@
+{{ $l := site.Params.links }}
+<section id="docs" class="docs" aria-labelledby="docs-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">Documentation</p>
+      <h2 id="docs-title">Get started and integrate</h2>
+    </header>
+    <div class="docs__grid">
+      <a class="doc-card" href="{{ "install/" | relURL }}">
+        {{ partial "icon.html" (dict "name" "download" "class" "icon icon--lg") }}
+        <h3>Installation</h3>
+        <p>Run EuroKeep with Docker Compose on your own hardware – the setup in five short steps.</p>
+        <span class="doc-card__more">Install EuroKeep {{ partial "icon.html" (dict "name" "arrow" "class" "icon icon--sm") }}</span>
+      </a>
+      <a class="doc-card" href="{{ $l.apiDocs }}">
+        {{ partial "icon.html" (dict "name" "code" "class" "icon icon--lg") }}
+        <h3>API Documentation</h3>
+        <p>The REST API (OpenAPI) describes all endpoints for accounts, transactions and budgets – ideal for your own scripts and integrations.</p>
+        <span class="doc-card__more">View API docs {{ partial "icon.html" (dict "name" "arrow" "class" "icon icon--sm") }}</span>
+      </a>
+      <a class="doc-card" href="{{ $l.manual }}">
+        {{ partial "icon.html" (dict "name" "book" "class" "icon icon--lg") }}
+        <h3>User Manual</h3>
+        <p>From installing with Docker to your first budget: step-by-step guides for everyday use of EuroKeep.</p>
+        <span class="doc-card__more">Read the manual {{ partial "icon.html" (dict "name" "arrow" "class" "icon icon--sm") }}</span>
+      </a>
+    </div>
+    <p class="docs__all"><a href="{{ "docs/" | relURL }}">All documentation at a glance {{ partial "icon.html" (dict "name" "arrow" "class" "icon icon--sm") }}</a></p>
+  </div>
+</section>

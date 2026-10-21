@@ -1,0 +1,30 @@
+{{- /*
+  Returns a dict with src, srcset, width and height for an image in assets/.
+  Raster images (JPG/PNG) are converted to WebP in the given widths, SVGs are passed through.
+  Usage: partial "responsive-image.html" (dict "src" "images/hero.jpg" "widths" (slice 768 1280 1920))
+*/ -}}
+{{- $img := resources.Get .src -}}
+{{- if not $img -}}
+  {{- errorf "responsive-image: %q not found in assets/" .src -}}
+{{- end -}}
+{{- $result := dict -}}
+{{- if in (slice "image/jpeg" "image/png" "image/webp") $img.MediaType.Type -}}
+  {{- $set := slice -}}
+  {{- $largest := $img -}}
+  {{- range .widths -}}
+    {{- if le . $img.Width -}}
+      {{- $r := $img.Resize (printf "%dx webp" .) -}}
+      {{- $set = $set | append (printf "%s %dw" $r.RelPermalink $r.Width) -}}
+      {{- $largest = $r -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if not $set -}}
+    {{- $largest = $img.Process "webp" -}}
+    {{- $set = slice (printf "%s %dw" $largest.RelPermalink $largest.Width) -}}
+  {{- end -}}
+  {{- $result = dict "src" $largest.RelPermalink "srcset" (delimit $set ", ") "width" $largest.Width "height" $largest.Height -}}
+{{- else -}}
+  {{- /* SVG etc.: publish as is (RelPermalink only here, so raster originals are not published). */ -}}
+  {{- $result = dict "src" $img.RelPermalink "srcset" "" "width" 0 "height" 0 -}}
+{{- end -}}
+{{- return $result -}}

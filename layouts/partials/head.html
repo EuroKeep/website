@@ -1,0 +1,50 @@
+{{- $pageTitle := cond (eq .Kind "404") "Page not found" .Title -}}
+{{- $title := cond .IsHome (site.Params.homeTitle | default site.Title) (printf "%s | %s" $pageTitle site.Title) -}}
+{{- $desc := .Description | default .Params.summary | default site.Params.description -}}
+{{- $ogImage := site.Params.ogImage | absURL -}}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+{{- if eq .Kind "404" }}
+<meta name="robots" content="noindex">
+{{- else }}
+<meta name="robots" content="{{ .Params.robots | default "index, follow" }}">
+<link rel="canonical" href="{{ .Permalink }}">
+{{- end }}
+<meta name="theme-color" content="#003399">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:image" content="{{ $ogImage }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EuroKeep – {{ site.Params.claim }}">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:image" content="{{ $ogImage }}">
+
+<link rel="icon" href="{{ site.Params.logo | relURL }}" type="image/svg+xml">
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="any">
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
+
+{{- if .IsHome }}
+  {{- /* Hero is the largest element above the fold – preload it. */ -}}
+  {{- $hero := partial "responsive-image.html" (dict "src" site.Params.heroImage "widths" (slice 768 1280 1920)) -}}
+  {{- if $hero.srcset }}
+<link rel="preload" as="image" {{ printf "imagesrcset=%q" $hero.srcset | safeHTMLAttr }} imagesizes="100vw" fetchpriority="high">
+  {{- else }}
+<link rel="preload" as="image" href="{{ $hero.src }}" fetchpriority="high">
+  {{- end }}
+{{- end }}
+
+{{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+{{ partial "schema.html" . }}
+{{ partial "matomo.html" . }}

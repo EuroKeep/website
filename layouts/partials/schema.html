@@ -1,0 +1,54 @@
+{{- /* Structured data (schema.org) for search engines. */ -}}
+{{- $org := dict
+  "@type" "Organization"
+  "@id" (printf "%s#organization" site.Home.Permalink)
+  "name" site.Params.company.name
+  "email" site.Params.links.email
+-}}
+{{- with site.Params.company.url }}{{ $org = merge $org (dict "url" .) }}{{ end -}}
+{{- $graph := slice $org -}}
+{{- if .IsHome -}}
+  {{- $sameAs := slice -}}
+  {{- with site.Params.links.github }}{{ $sameAs = $sameAs | append . }}{{ end -}}
+  {{- with site.Params.links.docker }}{{ $sameAs = $sameAs | append . }}{{ end -}}
+  {{- with site.Params.links.discord }}{{ $sameAs = $sameAs | append . }}{{ end -}}
+  {{- $graph = $graph | append (dict
+    "@type" "WebSite"
+    "@id" (printf "%s#website" site.Home.Permalink)
+    "url" site.Home.Permalink
+    "name" site.Title
+    "inLanguage" "en"
+    "publisher" (dict "@id" (printf "%s#organization" site.Home.Permalink))
+  ) -}}
+  {{- $screenshots := slice -}}
+  {{- range hugo.Data.showcase -}}
+    {{- with resources.Get .image -}}
+      {{- $screenshots = $screenshots | append (.Resize "900x webp").Permalink -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $app := dict
+    "@type" "SoftwareApplication"
+    "name" "EuroKeep"
+    "description" site.Params.description
+    "url" site.Home.Permalink
+    "applicationCategory" "FinanceApplication"
+    "operatingSystem" "Linux (Docker)"
+    "image" (site.Params.ogImage | absURL)
+    "screenshot" $screenshots
+    "sameAs" $sameAs
+    "publisher" (dict "@id" (printf "%s#organization" site.Home.Permalink))
+  -}}
+  {{- with site.Params.price -}}
+    {{- $app = merge $app (dict "offers" (dict "@type" "Offer" "price" .amount "priceCurrency" .currency)) -}}
+  {{- end -}}
+  {{- $graph = $graph | append $app -}}
+{{- else -}}
+  {{- $graph = $graph | append (dict
+    "@type" "BreadcrumbList"
+    "itemListElement" (slice
+      (dict "@type" "ListItem" "position" 1 "name" "Home" "item" site.Home.Permalink)
+      (dict "@type" "ListItem" "position" 2 "name" .Title "item" .Permalink)
+    )
+  ) -}}
+{{- end }}
+<script type="application/ld+json">{{ dict "@context" "https://schema.org" "@graph" $graph | jsonify | safeJS }}</script>

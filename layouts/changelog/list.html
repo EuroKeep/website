@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article class="page">
+  <header class="page__head">
+    <div class="container container--narrow">
+      {{ with .Params.eyebrow }}<p class="eyebrow">{{ . }}</p>{{ end }}
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.lead }}<p class="page__lead">{{ . }}</p>{{ end }}
+    </div>
+  </header>
+  <div class="container container--narrow">
+    <div class="prose">{{ .Content }}</div>
+    {{ range .Pages.ByDate.Reverse }}
+      {{ partial "changelog-release.html" (dict "page" .) }}
+    {{ else }}
+      <p class="release__empty">The first public release is in preparation. Stay tuned!</p>
+    {{ end }}
+  </div>
+</article>
+{{ end }}

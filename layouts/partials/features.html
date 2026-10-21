@@ -1,0 +1,17 @@
+<section id="features" class="features" aria-labelledby="features-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">Features</p>
+      <h2 id="features-title">Everything you need for your finances</h2>
+    </header>
+    <ul class="features__grid">
+      {{ range hugo.Data.features }}
+      <li class="feature">
+        <span class="feature__icon">{{ partial "icon.html" (dict "name" .icon "class" "icon icon--xl") }}</span>
+        <h3>{{ .title }}</h3>
+        <p>{{ .text }}</p>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+</section>

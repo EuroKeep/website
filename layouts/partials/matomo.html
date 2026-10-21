@@ -1,0 +1,21 @@
+{{- /* Self-hosted Matomo, only in production builds. Settings: [params.matomo] in hugo.toml. */ -}}
+{{- with site.Params.matomo -}}
+{{- if and .url hugo.IsProduction }}
+<script>
+  var _paq = window._paq = window._paq || [];
+  {{- if .disableCookies }}
+  _paq.push(['disableCookies']);
+  {{- end }}
+  _paq.push(['setDoNotTrack', true]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u={{ .url }};
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', {{ .siteId }}]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+{{- end -}}
+{{- end -}}

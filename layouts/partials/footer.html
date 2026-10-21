@@ -1,0 +1,23 @@
+{{ $l := site.Params.links }}
+{{ $c := site.Params.company }}
+{{ $changelog := site.GetPage "/changelog" }}
+{{ $latest := index ($changelog.Pages.ByDate.Reverse) 0 }}
+<footer id="footer" class="footer">
+  <div class="container footer__bar">
+    <div class="footer__build">
+      {{- with $latest }}
+      {{- $channel := .Params.channel | default "stable" }}
+      <p>Latest version: <a href="{{ .RelPermalink }}">v{{ .Params.version }}</a>{{ if ne $channel "stable" }} <span class="footer__badge">{{ upper $channel }}</span>{{ end }}</p>
+      {{- end }}
+      {{- with $changelog }}<p><a href="{{ .RelPermalink }}">Changelog</a></p>{{ end }}
+      <p class="footer__meta">Built <time datetime="{{ now.UTC.Format "2006-01-02T15:04:05Z" }}">{{ now.UTC.Format "2006-01-02 15:04" }} UTC</time> · Hugo {{ hugo.Version }}</p>
+      <p class="footer__copy">&copy; {{ now.Year }} {{ with $c.url }}<a href="{{ . }}" rel="noopener">{{ $c.name }}</a>{{ else }}{{ $c.name }}{{ end }}</p>
+    </div>
+    <ul class="footer__contact" aria-label="Contact and community">
+      {{ with $l.github }}<li><a href="{{ . }}" rel="noopener" target="_blank">GitHub{{ partial "icon.html" (dict "name" "github" "class" "icon icon--sm") }}</a></li>{{ end }}
+      {{ with $l.docker }}<li><a href="{{ . }}" rel="noopener" target="_blank">Docker Hub{{ partial "icon.html" (dict "name" "docker" "class" "icon icon--sm") }}</a></li>{{ end }}
+      {{ with $l.email }}<li><a href="mailto:{{ . }}">Email{{ partial "icon.html" (dict "name" "mail" "class" "icon icon--sm") }}</a></li>{{ end }}
+      {{ with $l.discord }}<li><a href="{{ . }}" rel="noopener" target="_blank">Discord{{ partial "icon.html" (dict "name" "discord" "class" "icon icon--sm") }}</a></li>{{ end }}
+    </ul>
+  </div>
+</footer>

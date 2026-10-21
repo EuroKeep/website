@@ -1,0 +1,12 @@
+{{ $l := site.Params.links }}
+{{ $hero := partial "responsive-image.html" (dict "src" site.Params.heroImage "widths" (slice 768 1280 1920)) }}
+<section id="top" class="hero">
+  <img class="hero__bg" src="{{ $hero.src }}"{{ with $hero.srcset }} srcset="{{ . }}" sizes="100vw"{{ end }}{{ with $hero.width }} width="{{ . }}" height="{{ $hero.height }}"{{ end }} alt="" fetchpriority="high" decoding="async">
+  <div class="container hero__content">
+    <h1><span class="eyebrow">Self-hosted budgeting &amp; money tracking</span> {{ .Params.heroTitle }}</h1>
+    <p class="hero__lead">{{ .Params.heroText }}</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{{ $l.demo }}" rel="noopener" target="_blank">Demo</a>
+    </div>
+  </div>
+</section>

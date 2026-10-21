@@ -1,0 +1,48 @@
+{{- /* One release. Params: page, single (true on the release page itself). */ -}}
+{{- $p := .page -}}
+{{- $version := $p.Params.version | default "?" -}}
+{{- $channel := $p.Params.channel | default "stable" -}}
+{{- $categories := slice
+  (dict "key" "added"      "label" "Added")
+  (dict "key" "changed"    "label" "Changed")
+  (dict "key" "deprecated" "label" "Deprecated")
+  (dict "key" "removed"    "label" "Removed")
+  (dict "key" "fixed"      "label" "Fixed")
+  (dict "key" "security"   "label" "Security")
+-}}
+<article class="release" id="v{{ replace $version "." "-" }}">
+  <header class="release__head">
+    <p class="release__meta">
+      <span class="release__version">v{{ $version }}</span>
+      {{- if ne $channel "stable" }} <span class="release__badge release__badge--{{ $channel }}">{{ upper $channel }}</span>{{ end }}
+      {{- if $p.Params.breaking }} <span class="release__badge release__badge--breaking">Breaking changes</span>{{ end }}
+      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "January 2, 2006" }}</time>
+    </p>
+    {{- if not .single }}
+    <h2><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></h2>
+    {{- with $p.Params.summary }}<p class="release__summary">{{ . | markdownify }}</p>{{ end }}
+    {{- end }}
+  </header>
+
+  {{- with $p.Params.changes }}
+  {{- $changes := . }}
+  {{- range $cat := $categories }}
+    {{- with index $changes $cat.key }}
+  <section class="release__group">
+    <h3 class="release__tag release__tag--{{ $cat.key }}">{{ $cat.label }}</h3>
+    <ul>
+      {{- range . }}{{ with . }}
+      <li>{{ . | markdownify }}</li>
+      {{- end }}{{ end }}
+    </ul>
+  </section>
+    {{- end }}
+  {{- end }}
+  {{- end }}
+
+  {{- if .single }}
+    {{- with $p.Content }}<div class="release__notes">{{ . }}</div>{{ end }}
+  {{- else if $p.Content }}
+  <p class="release__more"><a href="{{ $p.RelPermalink }}">Full release notes {{ partial "icon.html" (dict "name" "arrow" "class" "icon icon--sm") }}</a></p>
+  {{- end }}
+</article>

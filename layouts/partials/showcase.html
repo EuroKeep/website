@@ -1,0 +1,31 @@
+<section id="showcase" class="showcase" aria-labelledby="showcase-title">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">Take a look</p>
+      <h2 id="showcase-title">This is EuroKeep</h2>
+    </header>
+    {{ range $s := hugo.Data.showcase }}
+    <article class="showcase__row">
+      <div class="showcase__media">
+        <div class="iphone">
+          <div class="iphone__screen">
+            {{ $img := partial "responsive-image.html" (dict "src" $s.image "widths" (slice 300 600 900)) }}
+            <picture>
+              {{ with $s.image_dark }}
+              {{ $dark := partial "responsive-image.html" (dict "src" . "widths" (slice 300 600 900)) }}
+              <source media="(prefers-color-scheme: dark)" srcset="{{ $dark.srcset | default $dark.src }}"{{ with $dark.srcset }} sizes="(min-width: 768px) 260px, 70vw"{{ end }} width="{{ $dark.width | default 390 }}" height="{{ $dark.height | default 844 }}">
+              {{ end }}
+              <img src="{{ $img.src }}"{{ with $img.srcset }} srcset="{{ . }}" sizes="(min-width: 768px) 260px, 70vw"{{ end }} alt="{{ $s.alt }}" width="{{ $img.width | default 390 }}" height="{{ $img.height | default 844 }}" loading="lazy" decoding="async">
+            </picture>
+          </div>
+        </div>
+      </div>
+      <div class="showcase__text">
+        {{ with $s.eyebrow }}<p class="eyebrow">{{ . }}</p>{{ end }}
+        <h3>{{ $s.title }}</h3>
+        <p>{{ $s.text }}</p>
+      </div>
+    </article>
+    {{ end }}
+  </div>
+</section>

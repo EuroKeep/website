@@ -1,0 +1,74 @@
+baseURL = "https://eurokeep.io/"
+locale = "en-US"
+defaultContentLanguage = "en"
+title = "EuroKeep"
+disableKinds = ["taxonomy", "term", "RSS"]
+enableRobotsTXT = true
+
+[markup.goldmark.renderer]
+  unsafe = false
+[markup.highlight]
+  style = "github-dark"
+
+[frontmatter]
+  # Changelog files are named YYYY-MM-DD-<slug>.md: date and URL come from the file name.
+  date = [":filename", ":default"]
+  lastmod = ["lastmod", ":fileModTime"]
+
+[sitemap]
+  changeFreq = "monthly"
+
+[imaging.webp]
+  quality = 92
+  hint = "drawing"
+
+[params]
+  # <title> of the start page (max. ~60 characters); other pages get "<Page> | EuroKeep".
+  homeTitle = "EuroKeep – Self-Hosted Budgeting & Money Tracking"
+  description = "EuroKeep is a self-hosted app for budgeting and money tracking. Your finances stay on your own hardware – no cloud, no third parties."
+  claim = "Your Money. Your Data."
+  logo = "/images/logo.svg"
+  ogImage = "/images/og-image.png"     # 1200×630, used for social media previews
+  # Hero background, path inside assets/. Use your own Full HD image (1920×1080),
+  # e.g. "images/hero.jpg" – Hugo creates WebP variants automatically.
+  heroImage = "images/hero.svg"
+  # Docker image shown on changelog release pages as <image>:<version>.
+  dockerImage = "eurokeep/eurokeep"
+
+  # Price for the structured data (schema.org Offer); remove the block to omit it.
+  [params.price]
+    amount = "0"
+    currency = "EUR"
+
+  [params.links]
+    github = "https://github.com/EuroKeep"
+    docker = "https://hub.docker.com/r/eurokeep/eurokeep"
+    email = "mail@eurokeep.io"
+    discord = ""                             # hidden for now; enter invite link to show it again
+    demo = "https://demo.eurokeep.io/a/login/demo"
+    apiDocs = "https://apidocs.eurokeep.io/"
+    manual = "https://docs.eurokeep.io/"
+
+  [params.company]
+    name = "IT Solutions Gleim"
+    url = "https://nox.kiwi"                 # optional: company website
+
+  # Self-hosted Matomo. Tracking is only included in production builds (not with `hugo server`).
+  [params.matomo]
+    url = "https://matomo.nox.kiwi/"         # empty = no tracking
+    siteId = "1"
+    disableCookies = true                    # cookieless tracking – no consent banner needed
+
+[menus]
+  [[menus.footer]]
+    name = "Installation"
+    pageRef = "/install"
+    weight = 10
+  [[menus.footer]]
+    name = "Documentation"
+    pageRef = "/docs"
+    weight = 20
+  [[menus.footer]]
+    name = "Changelog"
+    pageRef = "/changelog"
+    weight = 30

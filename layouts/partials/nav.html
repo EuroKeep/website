@@ -1,0 +1,22 @@
+{{ $l := site.Params.links }}
+<header class="topnav">
+  <div class="container topnav__inner">
+    <a class="brand" href="{{ if .IsHome }}#top{{ else }}{{ "/" | relURL }}{{ end }}" aria-label="{{ if .IsHome }}EuroKeep – back to top{{ else }}EuroKeep – start page{{ end }}">
+      <img class="brand__logo" src="{{ site.Params.logo | relURL }}" alt="" width="40" height="40">
+      <span class="brand__claim">{{ site.Params.claim }}</span>
+    </a>
+    {{- $home := cond .IsHome "" ("/" | relURL) }}
+    <nav class="topnav__links" aria-label="Sections">
+      <a href="{{ $home }}#privacy">Privacy</a>
+      <a href="{{ $home }}#showcase">Screenshots</a>
+      <a href="{{ $home }}#features">Features</a>
+      <a href="{{ $home }}#docs" aria-label="Documentation"><span class="topnav__long">Documentation</span><span class="topnav__short" aria-hidden="true">Docs</span></a>
+    </nav>
+    <nav class="topnav__social" aria-label="Contact and community">
+      {{ with $l.github }}<a href="{{ . }}" rel="noopener" target="_blank" aria-label="GitHub">{{ partial "icon.html" (dict "name" "github") }}</a>{{ end }}
+      {{ with $l.docker }}<a href="{{ . }}" rel="noopener" target="_blank" aria-label="Docker Hub">{{ partial "icon.html" (dict "name" "docker") }}</a>{{ end }}
+      {{ with $l.email }}<a href="mailto:{{ . }}" aria-label="Email">{{ partial "icon.html" (dict "name" "mail") }}</a>{{ end }}
+      {{ with $l.discord }}<a href="{{ . }}" rel="noopener" target="_blank" aria-label="Discord">{{ partial "icon.html" (dict "name" "discord") }}</a>{{ end }}
+    </nav>
+  </div>
+</header>

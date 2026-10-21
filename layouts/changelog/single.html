@@ -1,0 +1,17 @@
+{{ define "main" }}
+<article class="page">
+  <header class="page__head">
+    <div class="container container--narrow">
+      <p class="eyebrow"><a href="{{ .Parent.RelPermalink }}">{{ .Parent.Title }}</a></p>
+      <h1>{{ .Title }}</h1>
+      {{ with .Params.summary }}<p class="page__lead">{{ . | markdownify }}</p>{{ end }}
+    </div>
+  </header>
+  <div class="container container--narrow prose">
+    {{ partial "changelog-release.html" (dict "page" . "single" true) }}
+    {{ with .Params.version }}
+    <p class="release__docker">Docker image: <code>{{ site.Params.dockerImage | default "eurokeep/eurokeep" }}:{{ . }}</code></p>
+    {{ end }}
+  </div>
+</article>
+{{ end }}
