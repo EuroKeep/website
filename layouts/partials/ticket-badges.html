@@ -1,0 +1,12 @@
+{{- /* Turns ticket keys (EUR-42, optionally followed by ":") in rendered HTML into badges.
+  Usage: partial "ticket-badges.html" $html
+  An optional type right after the key highlights the badge: EUR-1[epic], EUR-7[feature], EUR-9[bugfix].
+  Keys inside attributes or URLs (preceded by "/", "=", quotes …) stay untouched.
+  With params.jira.url set, every badge links to <url>/browse/<KEY>. */ -}}
+{{- $key := site.Params.jira.projectKey | default "EUR" -}}
+{{- $re := printf `(^|[\s>(\[])(%s-\d+)\b(?:\[(epic|feature|bugfix)\])?:?` $key -}}
+{{- $badge := `$1<span class="ticket ticket--$3">$2</span>` -}}
+{{- with site.Params.jira.url -}}
+  {{- $badge = printf `$1<a class="ticket ticket--$3" href="%s/browse/$2">$2</a>` (strings.TrimSuffix "/" .) -}}
+{{- end -}}
+{{- return safeHTML (replaceRE $re $badge (string .)) -}}
