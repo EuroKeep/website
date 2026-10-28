@@ -24,24 +24,31 @@
     {{- end }}
   </header>
 
-  {{- with $p.Params.changes }}
-  {{- $changes := . }}
+  {{- /* Entries come from the front matter (strings, Markdown) and from
+       data/jira/<file name>.json, written by scripts/jira-changelog.py. */ -}}
+  {{- $changes := $p.Params.changes | default dict }}
+  {{- $jira := dict }}
+  {{- with $p.File }}{{ $f := . }}{{ with hugo.Data.jira }}{{ with index . $f.ContentBaseName }}{{ $jira = .changes | default dict }}{{ end }}{{ end }}{{ end }}
   {{- range $cat := $categories }}
-    {{- with index $changes $cat.key }}
+    {{- $manual := slice }}{{ range index $changes $cat.key }}{{ with . }}{{ $manual = $manual | append . }}{{ end }}{{ end }}
+    {{- $tickets := index $jira $cat.key | default slice }}
+    {{- if or $manual $tickets }}
   <section class="release__group">
     <h3 class="release__tag release__tag--{{ $cat.key }}">{{ $cat.label }}</h3>
     <ul>
-      {{- range . }}{{ with . }}
-      <li>{{ . | markdownify }}</li>
-      {{- end }}{{ end }}
+      {{- range $manual }}
+      <li>{{ partial "ticket-badges.html" (. | markdownify) }}</li>
+      {{- end }}
+      {{- range $tickets }}
+      <li>{{ partial "ticket-badges.html" (printf "%s %s" .key (htmlEscape .summary)) }}</li>
+      {{- end }}
     </ul>
   </section>
     {{- end }}
   {{- end }}
-  {{- end }}
 
   {{- if .single }}
-    {{- with $p.Content }}<div class="release__notes">{{ . }}</div>{{ end }}
+    {{- with $p.Content }}<div class="release__notes">{{ partial "ticket-badges.html" . }}</div>{{ end }}
   {{- else if $p.Content }}
   <p class="release__more"><a href="{{ $p.RelPermalink }}">Full release notes {{ partial "icon.html" (dict "name" "arrow" "class" "icon icon--sm") }}</a></p>
   {{- end }}
