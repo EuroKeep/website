@@ -35,6 +35,12 @@ enableRobotsTXT = true
   # Docker image shown on changelog release pages as <image>:<version>.
   dockerImage = "eurokeep/eurokeep"
 
+  # Ticket keys (EUR-42) in the changelog are shown as badges.
+  # Tickets come from scripts/jira-changelog.py → data/jira/<release file>.json.
+  [params.jira]
+    projectKey = "EUR"
+    url = ""                                 # e.g. "https://eurokeep.atlassian.net" → badges link to the ticket; empty = no links
+
   # Price for the structured data (schema.org Offer); remove the block to omit it.
   [params.price]
     amount = "0"

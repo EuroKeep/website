@@ -9,7 +9,12 @@ breaking: false              # true = shows a "Breaking changes" badge
 summary: "One sentence about this release (overview + meta description)."
 draft: true
 
-# Leave out or empty any category you don't need. Entries support Markdown.
+# Leave out or empty any category you don't need. Entries support Markdown,
+# ticket keys like EUR-42 become badges, EUR-42[epic] / [feature] / [bugfix]
+# adds a highlighted type label (also in the release notes body). Jira tickets with fixVersion = version
+# are added automatically after: scripts/jira-changelog.py <this file>
+# (bugs/hotfixes → fixed, improvements → changed, everything else → added).
+# jiraVersion: "1.0.0"       # optional, if the Jira fixVersion differs from version
 changes:
   added:
     - ""

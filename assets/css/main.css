@@ -360,7 +360,8 @@ main > section {
 .release h2 a { color: var(--text); text-decoration: none; }
 .release h2 a:hover { color: var(--accent); }
 .release__summary { color: var(--muted); }
-.release__group { margin: 20px 0 0; }
+/* <section> here is a list group, not a page section: drop the global section padding. */
+.release__group { margin: 20px 0 0; padding-block: 0; }
 .release .release__tag { display: inline-block; margin: 0 0 8px; font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: .2em .65em; border-radius: 6px; color: var(--accent); background: var(--accent-soft); }
 .release__tag--fixed { color: #1b6e3a; background: #e3f4ea; }
 .release__tag--security, .release__tag--removed { color: #a12020; background: #fbe7e7; }
@@ -372,6 +373,33 @@ main > section {
 }
 .release ul { padding-left: 1.4em; margin: 0 0 .5em; }
 .release li { margin-bottom: .35em; }
+/* Release notes with blank lines between items render "loose" lists (<p> in <li>). */
+.release li > p { margin: 0 0 .35em; }
+.release li > ul { margin: 0 0 .6em; }
+.ticket {
+  display: inline-block; margin-right: .35em; padding: .1em .55em; border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .8em; font-weight: 700;
+  line-height: 1.5; vertical-align: .05em; white-space: nowrap;
+  color: var(--accent); background: var(--accent-soft); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+}
+a.ticket { text-decoration: none; }
+a.ticket:hover { background: var(--border); }
+/* Ticket types, written as EUR-1[epic] / [feature] / [bugfix] in changelog files. */
+.ticket--epic::after, .ticket--feature::after, .ticket--bugfix::after {
+  margin-left: .45em; padding-left: .45em; border-left: 1px solid currentColor;
+  font-family: system-ui, sans-serif; font-size: .85em; letter-spacing: .05em; text-transform: uppercase;
+}
+.ticket--epic::after { content: "Epic"; }
+.ticket--feature::after { content: "Feature"; }
+.ticket--bugfix::after { content: "Bugfix"; }
+.ticket--epic { color: #5b2a9e; background: #efe6fb; border-color: #d6c2f2; }
+.ticket--feature { color: #1b6e3a; background: #e3f4ea; border-color: #b9e2c8; }
+.ticket--bugfix { color: #a12020; background: #fbe7e7; border-color: #f1c1c1; }
+@media (prefers-color-scheme: dark) {
+  .ticket--epic { color: #d2b8ff; background: #2a1d45; border-color: #4a3575; }
+  .ticket--feature { color: #8fe0ad; background: #16352a; border-color: #2a5a40; }
+  .ticket--bugfix { color: #ffaaaa; background: #3d1b24; border-color: #6a2c38; }
+}
 .release code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .9em; padding: .1em .35em; border-radius: 6px; background: var(--accent-soft); }
 .release__notes { margin-top: 2em; }
 .release__more a { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; text-decoration: none; }
