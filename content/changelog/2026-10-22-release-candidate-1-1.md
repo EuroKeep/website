@@ -36,6 +36,7 @@ This is the entire list of features and changes added to this version:
 - EUR-71[bugfix] The Subscription Metrics Are Always EUR
 - EUR-90[bugfix] Select Boxes: Search Highlights Wrong Entries
 - EUR-88[bugfix] Subscriptions: Box Overflow on Landscape Mobile
+- EUR-82[bugfix] Evade Possible Law Issues With The Logo
 
 This is a **pre-release** for testing. Please back up your data before upgrading and report any issues on [GitHub](https://github.com/EuroKeep).
 
